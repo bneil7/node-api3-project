@@ -1,13 +1,25 @@
-const express = require('express');
+const express = require("express");
+const helmet = require("helmet");
 
 const server = express();
 
-server.get('/', (req, res) => {
+server.use(express.json());
+server.use(helmet());
+server.use(logger);
+
+server.get("/", (req, res) => {
   res.send(`<h2>Let's write some middleware!</h2>`);
 });
 
 //custom middleware
 
-function logger(req, res, next) {}
+function logger(req, res, next) {
+  console.log(
+    `At [${new Date().toISOString()}] a ${req.method} request was made to ${
+      req.url
+    }`
+  );
+  next();
+}
 
 module.exports = server;
